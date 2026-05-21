@@ -1,6 +1,4 @@
-async function reply({ message, params }) {
-    if (!message) return;
-    await message.reply(params[0] || "").catch(() => {});
-}
+// We no longer need this reply tool since all AI output defaults directly to discord.
+// Keeping the file empty for the registry to avoid parsing errors.
 
-export { reply };
+export {};
