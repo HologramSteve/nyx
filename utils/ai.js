@@ -36,7 +36,7 @@ class AIClient {
 
         let responseMessage = completion.choices[0].message;
 
-        if (responseMessage.tool_calls && responseMessage.tool_calls.length > 0) {
+        while (responseMessage.tool_calls && responseMessage.tool_calls.length > 0) {
             if (remember) this.history.push(responseMessage);
             else messages.push(responseMessage);
 

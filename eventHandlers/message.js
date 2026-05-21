@@ -29,7 +29,8 @@ async function handleMessage(message, ai) {
         const guildId = message.guild ? message.guild.id : null;
         const isNewServerContext = checkAndUpdateServer(guildName, guildId);
 
-        let contextPrefix = "(this message has been sent by user " + message.author.tag + ", with user id " + message.author.id + " and display name " + message.author.displayName + ")";
+        const locationStr = message.guild ? `Server: ${guildId}, Channel: ${message.channel.id}` : `DM Channel: ${message.channel.id}`;
+        let contextPrefix = `(Location: ${locationStr} | this message has been sent by user ${message.author.tag}, with user id ${message.author.id} and display name ${message.author.displayName})`;
         if (isNewServerContext) {
             const serverInfo = message.guild ? `Server: ${guildName} (${guildId})` : "Direct Message";
             contextPrefix = `[NEW CONTEXT: Now chatting in ${serverInfo}] ` + contextPrefix;

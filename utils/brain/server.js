@@ -4,7 +4,9 @@ import { BRAIN, io } from "./helpers.js";
 const SERVER_FILE = path.join(BRAIN, "serverid.txt");
 
 export function checkAndUpdateServer(guildName, guildId) {
-    const newContext = guildName ? `${guildName} (${guildId})` : "Direct Message";
+    if (!guildName || !guildId) return false;
+
+    const newContext = `${guildName} (${guildId})`;
     const currentContext = io.read(SERVER_FILE) || "";
     
     if (newContext !== currentContext.trim()) {

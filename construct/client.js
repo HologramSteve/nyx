@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Events } from "discord.js";
+import { Client, GatewayIntentBits, Events, Partials } from "discord.js";
 import { AIClient } from "../utils/ai.js";
 import { getPrompts } from "../utils/prompts.js";
 import { AnswerInterpreter } from "../utils/answerInterpreter.js";
@@ -38,8 +38,10 @@ const client = new Client({
     intents: [
         GatewayIntentBits.Guilds, 
         GatewayIntentBits.GuildMessages, 
-        GatewayIntentBits.MessageContent
-    ] 
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.DirectMessages
+    ],
+    partials: [Partials.Channel]
 });
 
 export { client as discordClient, ai as aiClient, DISCORD_TOKEN as discordToken}

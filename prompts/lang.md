@@ -41,3 +41,21 @@ Blocks a user from communicating with you. You can use their user id, tag, or us
 Unblocks a user.
 `get_blocked()`
 Returns a list of currently blocked users back to you quietly.
+
+Server tools:
+`get_servers()`
+Returns a list of all servers the bot is in, tagging ones where it has admin rights with "(owned)".
+`get_channels(server_id)`
+Returns a list of all channels in the specified server.
+`make_channel(server_id, name, type)`
+Creates a new channel in the server. `type` can be 'text' or 'voice'. Defaults to 'text'.
+`delete_channel(channel_id)`
+Deletes the specified channel by its ID.
+`timeout(server_id, user_id, duration_minutes, reason)`
+Times out a user in the server for the specified physical duration. `reason` is optional.
+`untimeout(server_id, user_id, reason)`
+Removes a timeout from a user. `reason` is optional.
+`kick(server_id, user_id, reason)`
+Kicks a user from the server. `reason` is optional.
+`send_msg(channel_id, message)`
+Sends a message to the specified channel.
