@@ -23,22 +23,17 @@ async function handleMessage(message, ai) {
             message.channel.sendTyping().catch(() => {});
         }, 8000);
 
-        const reply = await ai.chat(prompts.lang + "(this message has been sent by user " + message.author.tag + ", with user id " + message.author.id + " and display name " + message.author.displayName + "): " + message.content);
+        const reply = await ai.chat(
+            "(this message has been sent by user " + message.author.tag + ", with user id " + message.author.id + " and display name " + message.author.displayName + "): " + message.content,
+            { client: discordClient, message: message }
+        );
 
         console.log(reply.content);
 
-        const interpreter = new AnswerInterpreter(discordClient, reply.content, message);
-        const results = await interpreter.handleInput();
-        const ended = results?.some(r => r?.ended);
-        if (ended && typingInterval) {
-            clearInterval(typingInterval);
-            typingInterval = null;
-        }
-
-        // If the AI didn't use any valid language commands, fall back to plain reply
-        if (!results || results.length === 0) {
+        // If the AI outputted any straight text, fall back to plain reply
+        if (reply.content && reply.content.trim().length > 0) {
             const fullMessage = formatDiscordReply(reply);
-            await message.reply(fullMessage);
+            await message.reply(fullMessage).catch(() => {});
         }
     } catch (error) {
         console.error("Error AI response:", error);
