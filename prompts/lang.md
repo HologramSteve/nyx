@@ -10,4 +10,4 @@ All docs:
 `reply(message)`
 Replies to the message
 `end()`
-Stops answering (this means you can reply twice, etc)
+Stops answering (this means you can reply twice, etc). Use this when asked to not respond, or if a message doesn't concern you at all.
