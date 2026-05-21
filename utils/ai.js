@@ -10,6 +10,8 @@ class AIClient {
     }
 
     async chat(content, remember=true, isSystem=false) {
+        const startTime = performance.now();
+
         // determine the author for history logs
         let author = "user"
         if (isSystem) author = "system"
@@ -66,6 +68,9 @@ class AIClient {
             this.history.push(responseMessage);
         }
 
+        const endTime = performance.now();
+        const duration = ((endTime - startTime) / 1000).toFixed(2);
+
         const response = {
             content: responseMessage.content,
             usage: {
@@ -74,9 +79,11 @@ class AIClient {
                 tokens_total: completion.usage.total_tokens,
                 tokens_in_cached: completion.usage.prompt_cache_hit_tokens,
                 tokens_in_uncached: completion.usage.prompt_cache_miss_tokens
-            }
+            },
+            duration: `${duration}s`,
+            speed: duration > 0 ? `${(completion.usage.completion_tokens / duration).toFixed(2)} tokens/s` : "?"
         }
-
+        
         return response;
     }
 
