@@ -9,7 +9,7 @@ class AIClient {
         this.tools = tools || [];
     }
 
-    async chat(content, remember=true, isSystem=false) {
+    async chat(content, context = {}, remember=true, isSystem=false) {
         const startTime = performance.now();
 
         // determine the author for history logs
@@ -41,7 +41,7 @@ class AIClient {
             else messages.push(responseMessage);
 
             for (const toolCall of responseMessage.tool_calls) {
-                const toolResult = await this.handleTool(toolCall, toolCall.function.arguments);
+                const toolResult = await this.handleTool(toolCall, toolCall.function.arguments, context);
                 const toolMsg = {
                     role: "tool",
                     tool_call_id: toolCall.id,
@@ -87,14 +87,14 @@ class AIClient {
         return response;
     }
 
-    async handleTool(toolCall, args) {
+    async handleTool(toolCall, args, context) {
         const foundTool = this.tools.find(t => t.tool.function.name === toolCall.function.name);
         if (!foundTool) {
             console.error(`Tool ${toolCall.function.name} not found!`);
             return "Tool not found";
         }
 
-        const result = await foundTool.call(JSON.parse(args));
+        const result = await foundTool.call(JSON.parse(args), context);
         return result;
     }
 
