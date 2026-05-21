@@ -27,3 +27,9 @@ Adds a task to your todo list.
 Deletes the specific task from your todo list.
 `clear_todos()`
 Clears all todos.
+
+Moderation tools:
+`block(identifier)`
+Blocks a user from communicating with you. You can use their user id, tag, or username. They will be ignored entirely moving forward.
+`unblock(identifier)`
+Unblocks a user.
