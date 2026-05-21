@@ -71,6 +71,11 @@ class AnswerInterpreter {
     }
 
     async handleLine(line, tools) {
+        // Auto-fill missing semicolon
+        if (!line.endsWith(";")) {
+            line += ";";
+        }
+
         // Parse: function_name(param1, param2, ...);
         const match = line.match(/^(\w+)\(([^)]*)\);$/);
         if (!match) return null;
