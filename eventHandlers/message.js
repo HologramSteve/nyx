@@ -2,7 +2,7 @@ import { discordClient } from "../construct/client.js";
 import { AnswerInterpreter } from "../utils/answerInterpreter.js";
 import { getPrompts } from "../utils/prompts.js";
 import { formatDiscordReply } from "../utils/formatters.js";
-import { is_blocked } from "../utils/brain.js";
+import { is_blocked, checkAndUpdateServer } from "../utils/brain.js";
 const prompts = getPrompts();
 async function handleMessage(message, ai) {
     // Ignore messages from bots (including ourselves)
@@ -23,8 +23,20 @@ async function handleMessage(message, ai) {
             message.channel.sendTyping().catch(() => {});
         }, 8000);
 
+        // check server id
+
+        const guildName = message.guild ? message.guild.name : null;
+        const guildId = message.guild ? message.guild.id : null;
+        const isNewServerContext = checkAndUpdateServer(guildName, guildId);
+
+        let contextPrefix = "(this message has been sent by user " + message.author.tag + ", with user id " + message.author.id + " and display name " + message.author.displayName + ")";
+        if (isNewServerContext) {
+            const serverInfo = message.guild ? `Server: ${guildName} (${guildId})` : "Direct Message";
+            contextPrefix = `[NEW CONTEXT: Now chatting in ${serverInfo}] ` + contextPrefix;
+        }
+
         const reply = await ai.chat(
-            "(this message has been sent by user " + message.author.tag + ", with user id " + message.author.id + " and display name " + message.author.displayName + "): " + message.content,
+            contextPrefix + ": " + message.content,
             { client: discordClient, message: message }
         );
 
