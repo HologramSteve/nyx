@@ -7,20 +7,24 @@ export function get_blocked() {
     return io.readJSON(BLOCKED_FILE, []);
 }
 
-export function block_user(identifier) {
+export function block_user(identifier, reason = "No reason provided") {
     const bl = get_blocked();
-    if (!bl.includes(identifier)) {
-        bl.push(identifier);
+    const existing = bl.find(x => typeof x === "string" ? x === identifier : x.identifier === identifier);
+    if (!existing) {
+        bl.push({ identifier, reason });
         io.writeJSON(BLOCKED_FILE, bl);
     }
 }
 
 export function unblock_user(identifier) {
     const bl = get_blocked();
-    io.writeJSON(BLOCKED_FILE, bl.filter(x => x !== identifier));
+    io.writeJSON(BLOCKED_FILE, bl.filter(x => typeof x === "string" ? x !== identifier : x.identifier !== identifier));
 }
 
 export function is_blocked(id, tag, username) {
     const bl = get_blocked();
-    return bl.includes(id) || bl.includes(tag) || bl.includes(username);
+    return bl.some(x => {
+        const ident = typeof x === "string" ? x : x.identifier;
+        return ident === id || ident === tag || ident === username;
+    });
 }
