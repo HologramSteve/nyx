@@ -5,3 +5,4 @@ brain/todos/
 brain/notes/
 .DS_Store
 do-not-delete
+/brain/blocked.json
