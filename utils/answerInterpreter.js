@@ -90,6 +90,7 @@ class AnswerInterpreter {
         }
 
         console.log("Executed: " + fn);
+        console.log(params)
         const result = await tool({
             client: this.client,
             message: this.message,
@@ -98,7 +99,7 @@ class AnswerInterpreter {
         });
 
         if (result?.ended) return result;
-        return { fn, params };
+        return { fn, params, result };
     }
 }
 
