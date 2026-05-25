@@ -17,6 +17,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import { add_to_user_convo } from "./brain/convos.js";
+
 class AnswerInterpreter {
     static toolsPromise = null;
 
@@ -62,11 +64,21 @@ class AnswerInterpreter {
     async handleInput() {
         const tools = await AnswerInterpreter.loadTools();
         const results = [];
+        let ignored = false;
+        
         for (const line of this.lines) {
             const result = await this.handleLine(line, tools);
             if (result) results.push(result);
-            if (result?.ended) break;
+            if (result?.ended) {
+                ignored = true;
+                break;
+            }
         }
+        
+        if (!ignored && this.message) {
+            add_to_user_convo(this.message.author.id, "user", this.message.content);
+        }
+        
         return results;
     }
 
