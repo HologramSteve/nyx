@@ -2,6 +2,7 @@ import { Client, GatewayIntentBits, Events, Partials } from "discord.js";
 import { AIClient } from "../utils/ai.js";
 import { getPrompts } from "../utils/prompts.js";
 import { AnswerInterpreter } from "../utils/answerInterpreter.js";
+import { getSkillFile, getAllSkills } from "../utils/skills.js";
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -31,8 +32,49 @@ const langTool = {
     }
 };
 
+const skillTool = {
+    tool: {
+        type: "function",
+        function: {
+            name: "get_skill_file",
+            description: "Get the full markdown content for a named skill prompt.",
+            parameters: {
+                type: "object",
+                properties: {
+                    skillName: {
+                        type: "string",
+                        description: "The skill filename without the .md extension."
+                    }
+                },
+                required: ["skillName"]
+            }
+        }
+    },
+    call: async (args) => {
+        return getSkillFile(args.skillName);
+    }
+};
+
+const skillListTool = {
+    tool: {
+        type: "function",
+        function: {
+            name: "get_all_skills",
+            description: "List all available skill prompt names and their contents.",
+            parameters: {
+                type: "object",
+                properties: {},
+                required: []
+            }
+        }
+    },
+    call: async () => {
+        return getAllSkills();
+    }
+};
+
 const prompts = getPrompts();
-const ai = new AIClient(DEEPSEEK_API_KEY, MODEL, [langTool], prompts.sysprompt + "\n\n" + prompts.lang);
+const ai = new AIClient(DEEPSEEK_API_KEY, MODEL, [langTool, skillTool, skillListTool], prompts.sysprompt + "\n\n" + prompts.lang);
 
 const client = new Client({ 
     intents: [
