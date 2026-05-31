@@ -47,10 +47,36 @@ Server tools:
 Returns a list of all servers the bot is in, tagging ones where it has admin rights with "(owned)".
 `get_channels(server_id)`
 Returns a list of all channels in the specified server.
+`get_roles(server_id)`
+Returns a list of all roles in the specified server, sorted by role position.
+`make_category(server_id, name)`
+Creates a new category in the specified server.
 `make_channel(server_id, name, type)`
-Creates a new channel in the server. `type` can be 'text' or 'voice'. Defaults to 'text'.
+Creates a new channel in the server. `type` can be 'text' or 'voice'. Defaults to 'text'. You can also pass a category ID before `type` to create the channel inside that category.
+`rename_channel(channel_id, new_name)`
+Renames an existing channel.
+`move_channel(channel_id, category_id)`
+Moves a channel into a category. Use an empty category_id to remove it from its category.
 `delete_channel(channel_id)`
 Deletes the specified channel by its ID.
+`set_channel_permissions(channel_id, target_id, allow, deny)`
+Sets channel permission overrides for a role or user. Use `true` or `false` for allow/deny flags.
+`create_role(server_id, name)`
+Creates a new role in the server.
+`rename_role(server_id, role_id, new_name)`
+Renames an existing role.
+`move_role(server_id, role_id, position)`
+Moves a role to a new position in the role list.
+`set_role_permissions(server_id, role_id, permissions)`
+Sets the permissions for a role using a comma or space separated list of Discord permission flags.
+`set_role_color(server_id, role_id, color)`
+Changes the role color.
+`delete_role(server_id, role_id)`
+Deletes a role from the server.
+`assign_role(server_id, user_id, role_id)`
+Assigns a role to a user in the server.
+`remove_role(server_id, user_id, role_id)`
+Removes a role from a user in the server.
 `timeout(server_id, user_id, duration_minutes, reason)`
 Times out a user in the server for the specified physical duration. `reason` is optional.
 `untimeout(server_id, user_id, reason)`
