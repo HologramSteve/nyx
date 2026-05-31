@@ -4,12 +4,10 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const BRAIN = path.resolve(__dirname, "..", "..", "brain");
-export const CONVOS = path.join(BRAIN, "convos");
 export const NOTES = path.join(BRAIN, "notes");
 export const TODOS = path.join(BRAIN, "todos");
-export const MAX_CONVO = 50;
 
-[CONVOS, NOTES, TODOS].forEach(d => { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); });
+[NOTES, TODOS].forEach(d => { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); });
 
 export const io = {
     readJSON: (p, fb = null) => { try { return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, "utf-8")) : fb; } catch { return fb; } },

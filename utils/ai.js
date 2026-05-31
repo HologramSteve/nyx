@@ -1,5 +1,4 @@
 import OpenAI from "openai";
-import { get_user_convo } from "./brain/convos.js";
 
 class AIClient {
     constructor(apiKey, model, tools = [], systemPrompt = null) {
@@ -25,25 +24,6 @@ class AIClient {
         }
 
         let messages = remember ? this.history.slice() : [...this.history, userMsg];
-
-        if (context.message) {
-            const userId = context.message.author.id;
-            const convos = get_user_convo(userId);
-            if (convos && convos.length > 0) {
-                const pastConvos = convos.slice(-50).map(msg => ({
-                    role: msg.role === "assistant" ? "assistant" : "user",
-                    content: msg.content
-                }));
-                // Insert past context after the system prompt but before recent history
-                messages = [
-                    messages[0], // system prompt
-                    { role: "system", content: "--- PAST 50 CONVERSATIONS WITH THIS USER ---" },
-                    ...pastConvos,
-                    { role: "system", content: "--- END PAST CONVERSATIONS ---" },
-                    ...messages.slice(1)
-                ];
-            }
-        }
 
         let completion = await this.openai.chat.completions.create({
             messages: messages,
