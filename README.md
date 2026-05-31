@@ -4,10 +4,8 @@ A Discord bot that replies to messages with an AI backend. It uses `discord.js` 
 
 ## What it does
 
-- Listens for Discord messages in servers and DMs.
-- Sends user messages to the AI model with local conversation context.
-- Supports a small command language for memory, todos, notes, moderation, and Discord actions.
-- Stores conversation and memory data in the `brain/` folder.
+ - Supports a small command language for memory, todos, notes, moderation, and Discord actions.
+ - Stores memory data in the `brain/` folder.
 
 ## Self deploy
 
