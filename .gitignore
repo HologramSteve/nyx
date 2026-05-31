@@ -1,8 +1,9 @@
 node_modules/
 .env
-brain/convos/
 brain/todos/
 brain/notes/
 .DS_Store
 do-not-delete
 /brain/blocked.json
+/brain/serverid.txt
+brain/serverid.txt
